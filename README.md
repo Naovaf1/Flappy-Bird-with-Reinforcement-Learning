@@ -16,7 +16,9 @@ The goal is not to build Flappy Bird from scratch. The goal is to start from an 
 - `agent.py`: DQN model and agent logic
 - `skeleton/agent_skeleton.py`: incomplete workshop version for students
 - `skeleton/train_skeleton.py`: incomplete workshop version for students
-- `models/dqn_flappy_best.pth`: backup trained model for demos
+- `models/dqn_flappy_50_best.pth`: weak demo model
+- `models/dqn_flappy_300_best.pth`: medium demo model
+- `models/dqn_flappy_1000_best.pth`: strong demo model
 
 ## Requirements
 
@@ -52,17 +54,25 @@ This path is only for demo, not for training.
 python manual_play.py
 ```
 
-2. Watch the backup AI model play:
+2. Watch the backup AI model play.
+
+Recommended quick demo choices:
 
 ```bash
-python play.py --model .\models\dqn_flappy_best.pth --games 1
+python play.py --games 1
+python play.py --model .\models\dqn_flappy_50_best.pth --games 1
+python play.py --model .\models\dqn_flappy_300_best.pth --games 1
+python play.py --model .\models\dqn_flappy_1000_best.pth --games 1
 ```
 
 Notes:
 
-- `models/dqn_flappy_best.pth` is the backup trained model included in the repository
+- `models/dqn_flappy_50_best.pth` is a weak model for comparison
+- `models/dqn_flappy_300_best.pth` is a medium model for comparison
+- `models/dqn_flappy_1000_best.pth` is the strongest demo model in this repository
+- `python play.py --games 1` now defaults to the 1000-episode model
 - in Quick demo mode, you do not need to run `train.py`
-- if you already trained a weak model and overwrote the backup file, download the latest ZIP from GitHub again to restore the original backup model
+- if you already trained a weak model and overwrote files locally, download the latest ZIP from GitHub again to restore the backup models
 
 ## Path B: Workshop mode
 
@@ -91,6 +101,13 @@ Short training example:
 ```bash
 python train.py --episodes 50 --best-model .\models\dqn_flappy_50_best.pth --final-model .\models\dqn_flappy_50_final.pth --plot training_progress_50.png
 python play.py --model .\models\dqn_flappy_50_best.pth --games 1
+```
+
+Medium training example:
+
+```bash
+python train.py --episodes 300 --best-model .\models\dqn_flappy_300_best.pth --final-model .\models\dqn_flappy_300_final.pth --plot training_progress_300.png
+python play.py --model .\models\dqn_flappy_300_best.pth --games 1
 ```
 
 Longer training example:
@@ -147,6 +164,7 @@ Safer comparison examples:
 
 ```bash
 python train.py --episodes 50 --best-model .\models\dqn_flappy_50_best.pth --final-model .\models\dqn_flappy_50_final.pth --plot training_progress_50.png
+python train.py --episodes 300 --best-model .\models\dqn_flappy_300_best.pth --final-model .\models\dqn_flappy_300_final.pth --plot training_progress_300.png
 python train.py --episodes 1000 --best-model .\models\dqn_flappy_1000_best.pth --final-model .\models\dqn_flappy_1000_final.pth --plot training_progress_1000.png
 ```
 
@@ -155,13 +173,14 @@ python train.py --episodes 1000 --best-model .\models\dqn_flappy_1000_best.pth -
 Backup model:
 
 ```bash
-python play.py --model .\models\dqn_flappy_best.pth --games 1
+python play.py --games 1
 ```
 
 Specific trained models:
 
 ```bash
 python play.py --model .\models\dqn_flappy_50_best.pth --games 1
+python play.py --model .\models\dqn_flappy_300_best.pth --games 1
 python play.py --model .\models\dqn_flappy_1000_best.pth --games 1
 ```
 
@@ -196,7 +215,9 @@ The game environment is the same in both. The main difference is who chooses the
 
 ## Backup material
 
-- `models/dqn_flappy_best.pth`: trained checkpoint for live demos
+- `models/dqn_flappy_50_best.pth`: weak checkpoint for comparison
+- `models/dqn_flappy_300_best.pth`: medium checkpoint for comparison
+- `models/dqn_flappy_1000_best.pth`: strong checkpoint for comparison
 - `README_WORKSHOP.md`: extra workshop notes
 - `training_progress_1000.png`: sample training curve
 

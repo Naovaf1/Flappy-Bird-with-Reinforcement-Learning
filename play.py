@@ -9,17 +9,26 @@ import pygame
 from agent import DQNAgent
 
 
+DEFAULT_MODEL_PATH = "models/dqn_flappy_1000_best.pth"
+
+
 def resolve_model_path(model_path):
     if model_path and os.path.exists(model_path):
         return model_path
 
-    for candidate in ("models/dqn_flappy_best.pth", "models/dqn_flappy_final.pth"):
+    for candidate in (
+        DEFAULT_MODEL_PATH,
+        "models/dqn_flappy_300_best.pth",
+        "models/dqn_flappy_50_best.pth",
+        "models/dqn_flappy_best.pth",
+        "models/dqn_flappy_final.pth",
+    ):
         if os.path.exists(candidate):
             return candidate
     return None
 
 
-def play(model_path="models/dqn_flappy_best.pth", num_games=3, render=True, fps=30):
+def play(model_path=DEFAULT_MODEL_PATH, num_games=3, render=True, fps=30):
     """Load a model and watch the agent play."""
     resolved_model_path = resolve_model_path(model_path)
     if resolved_model_path is None:
@@ -81,7 +90,7 @@ def play(model_path="models/dqn_flappy_best.pth", num_games=3, render=True, fps=
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Watch a trained DQN agent play Flappy Bird.")
-    parser.add_argument("--model", default="models/dqn_flappy_best.pth", help="Path to model checkpoint.")
+    parser.add_argument("--model", default=DEFAULT_MODEL_PATH, help="Path to model checkpoint.")
     parser.add_argument("--games", type=int, default=3, help="Number of games to run.")
     parser.add_argument("--no-render", action="store_true", help="Run without opening the game window.")
     parser.add_argument("--fps", type=int, default=30, help="Playback speed when rendering.")
