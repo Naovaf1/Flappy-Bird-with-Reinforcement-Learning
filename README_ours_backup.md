@@ -1,38 +1,11 @@
 # Flappy Bird with Reinforcement Learning
 
-This repository is a workshop-friendly Flappy Bird project built around one simple comparison:
+This repository is a workshop-friendly Flappy Bird project that shows the difference between:
 
 - a normal game controlled by a human
 - the same game controlled by a trained Reinforcement Learning agent
 
-The goal is not to build Flappy Bird from scratch. The goal is to start from an existing game environment and add a DQN agent on top of it, then use that result as both a demo and a guided workshop example.
-
-## Introduction to Reinforcement Learning
-
-Reinforcement Learning (RL) is a branch of machine learning where an agent learns by interacting with an environment. Instead of learning from labeled examples, the agent receives rewards or penalties and gradually improves its behavior to maximize long-term reward.
-
-In this project:
-
-- the **agent** is the bird controller
-- the **environment** is the Flappy Bird game
-- the **state** is the observation returned by the game
-- the **action** is either flap or do nothing
-- the **reward** tells the agent whether its recent decision was helpful or harmful
-
-This makes Flappy Bird a good teaching example because the action space is small, the game is easy to understand visually, and the difference between weak and strong policies is easy to demonstrate on screen.
-
-## Why DQN
-
-This project uses Deep Q-Network (DQN), a reinforcement learning method that replaces a Q-table with a neural network. That lets the agent handle a continuous or structured state instead of memorizing every possible situation exactly.
-
-The repository mainly focuses on:
-
-- experience replay
-- target networks
-- epsilon-greedy exploration
-- Double DQN for the stronger tuned model
-
-The goal here is practical understanding rather than a full research implementation. The code is meant to be readable enough for demos, classroom explanation, and follow-up experiments.
+The goal is not to build Flappy Bird from scratch. The goal is to start from an existing game environment and add a DQN agent on top of it.
 
 ## What is inside
 
@@ -47,30 +20,6 @@ The goal here is practical understanding rather than a full research implementat
 - `models/dqn_flappy_500_best.pth`: medium demo model
 - `models/dqn_flappy_1000_best.pth`: strong score-base demo model
 - `models/dqn_flappy_strong_best.pth`: tuned stability-first demo model
-
-## Project structure
-
-```text
-Flappy bird/
-|-- agent.py
-|-- train.py
-|-- play.py
-|-- manual_play.py
-|-- check_env.py
-|-- requirements.txt
-|-- models/
-|-- skeleton/
-|-- notes/
-```
-
-Main roles:
-
-- `manual_play.py`: human-controlled baseline
-- `play.py`: AI-controlled demo playback
-- `train.py`: training and evaluation flow
-- `agent.py`: DQN model, replay memory, checkpoint loading and saving
-- `skeleton/`: classroom starter files for students
-- `models/`: prepared checkpoints for quick comparison
 
 ## Requirements
 
@@ -94,15 +43,6 @@ pip install -r requirements.txt
 ```bash
 python check_env.py
 ```
-
-## Human vs AI demo
-
-One of the clearest parts of this repository is that the environment stays the same while the decision-maker changes.
-
-- In `manual_play.py`, the player decides when to flap.
-- In `play.py`, the trained model decides when to flap.
-
-That makes it easy to explain the core idea of RL in class: the game itself does not change, only the policy that chooses the next action.
 
 ## Path A: Quick demo
 
@@ -256,36 +196,6 @@ The two important files to compare are:
 - `play.py`: action comes from `agent.select_action(state)`
 
 The game environment is the same in both. The main difference is who chooses the action.
-
-## Training notes
-
-This repository includes multiple checkpoints so the class can compare different behaviors without retraining everything from scratch.
-
-- `50` is a weak comparison point
-- `500` is a medium comparison point
-- `1000` is a strong score-oriented model
-- `Strong` is a tuned follow-up model that prioritizes stability more than peak score
-
-The tuned `Strong` version keeps the same general project structure but changes how the model is trained and selected. Compared with the `1000` version, it adds a more stability-focused training setup with Double DQN, Huber loss, a lower learning rate, a larger batch size, a larger replay buffer, gradient clipping, and multi-game evaluation for checkpoint selection.
-
-This does not guarantee a perfect run every time. Flappy Bird still contains variation, and DQN is still an approximate method. The practical goal is to reduce early failures and make the demo behavior more reliable.
-
-## References and background
-
-If you want to extend the presentation or explain the theory in more depth, useful topics to mention are:
-
-- Q-learning and the Bellman equation
-- experience replay
-- target networks
-- epsilon-greedy exploration
-- Double DQN
-
-Useful references:
-
-- Mnih, V. et al. (2015). *Human-level control through deep reinforcement learning.*
-- Van Hasselt, H. et al. (2016). *Deep Reinforcement Learning with Double Q-learning.*
-- [Gymnasium Documentation](https://gymnasium.farama.org/)
-- [Flappy Bird Gymnasium](https://github.com/markub3327/flappy-bird-gymnasium)
 
 ## Backup material
 
