@@ -75,6 +75,28 @@ python train.py --episodes 1000 --plot training_progress_1000.png
 
 Then run `play.py` again to see the newly trained model.
 
+Important:
+
+- `python train.py` writes model checkpoints into the `models/` folder
+- by default it overwrites `models/dqn_flappy_best.pth` and `models/dqn_flappy_final.pth`
+- if you want to keep the original backup model, train into a different filename
+
+Example:
+
+```bash
+python train.py --episodes 50 --best-model .\models\dqn_flappy_50_best.pth --final-model .\models\dqn_flappy_50_final.pth --plot training_progress_50.png
+python play.py --model .\models\dqn_flappy_50_best.pth --games 1
+```
+
+Longer training example:
+
+```bash
+python train.py --episodes 1000 --best-model .\models\dqn_flappy_1000_best.pth --final-model .\models\dqn_flappy_1000_final.pth --plot training_progress_1000.png
+python play.py --model .\models\dqn_flappy_1000_best.pth --games 1
+```
+
+This makes it easy to compare a weaker model and a stronger model without confusion.
+
 ### Path B: Workshop mode
 
 Use this if you want students to complete the missing logic themselves.
@@ -120,6 +142,11 @@ These commands use the completed reference files `agent.py` and `train.py`.
 
 If you are running the workshop exercise, finish the skeleton files first.
 
+Warning:
+
+- by default, training overwrites `models/dqn_flappy_best.pth`
+- if you want to compare multiple trained models, use `--best-model` and `--final-model` with different filenames
+
 Short demo run:
 
 ```bash
@@ -134,10 +161,24 @@ python train.py --episodes 1000 --plot training_progress_1000.png
 
 This saves model checkpoints into the `models/` folder.
 
+Safer comparison examples:
+
+```bash
+python train.py --episodes 50 --best-model .\models\dqn_flappy_50_best.pth --final-model .\models\dqn_flappy_50_final.pth --plot training_progress_50.png
+python train.py --episodes 1000 --best-model .\models\dqn_flappy_1000_best.pth --final-model .\models\dqn_flappy_1000_final.pth --plot training_progress_1000.png
+```
+
 ## Watch the AI play
 
 ```bash
 python play.py --model .\models\dqn_flappy_best.pth --games 1
+```
+
+Or choose a specific trained model:
+
+```bash
+python play.py --model .\models\dqn_flappy_50_best.pth --games 1
+python play.py --model .\models\dqn_flappy_1000_best.pth --games 1
 ```
 
 Controls while watching:

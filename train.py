@@ -8,7 +8,12 @@ import matplotlib.pyplot as plt
 from agent import DQNAgent
 
 
-def train(num_episodes=500, render=False):
+def train(
+    num_episodes=500,
+    render=False,
+    best_model_path="models/dqn_flappy_best.pth",
+    final_model_path="models/dqn_flappy_final.pth",
+):
     """Main training loop for the Flappy Bird DQN agent."""
     print(f"Starting training for {num_episodes} episodes...")
 
@@ -47,8 +52,8 @@ def train(num_episodes=500, render=False):
 
         if total_reward > best_score:
             best_score = total_reward
-            agent.save("models/dqn_flappy_best.pth")
-            print(f"[New Best] Episode {episode}: reward={total_reward:.1f} saved to models/dqn_flappy_best.pth")
+            agent.save(best_model_path)
+            print(f"[New Best] Episode {episode}: reward={total_reward:.1f} saved to {best_model_path}")
 
         if episode % 10 == 0:
             avg_score = sum(scores[-10:]) / min(10, len(scores))
@@ -60,7 +65,8 @@ def train(num_episodes=500, render=False):
                 f"Epsilon: {agent.epsilon:.3f}"
             )
 
-    agent.save("models/dqn_flappy_final.pth")
+    agent.save(final_model_path)
+    print(f"Saved final checkpoint to {final_model_path}")
     env.close()
     return scores
 
@@ -104,7 +110,22 @@ if __name__ == "__main__":
         default="training_progress.png",
         help="Output file for the training plot.",
     )
+    parser.add_argument(
+        "--best-model",
+        default="models/dqn_flappy_best.pth",
+        help="Path for the best checkpoint. Warning: this file will be overwritten during training.",
+    )
+    parser.add_argument(
+        "--final-model",
+        default="models/dqn_flappy_final.pth",
+        help="Path for the final checkpoint saved at the end of training.",
+    )
     args = parser.parse_args()
 
-    scores = train(num_episodes=args.episodes, render=args.render)
+    scores = train(
+        num_episodes=args.episodes,
+        render=args.render,
+        best_model_path=args.best_model,
+        final_model_path=args.final_model,
+    )
     plot_scores(scores, output_path=args.plot)
