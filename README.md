@@ -19,7 +19,7 @@ The goal is not to build Flappy Bird from scratch. The goal is to start from an 
 - `models/dqn_flappy_50_best.pth`: weak demo model
 - `models/dqn_flappy_500_best.pth`: medium demo model
 - `models/dqn_flappy_1000_best.pth`: strong score-base demo model
-- `models/dqn_flappy_strong_best.pth`: strongest tuned demo model
+- `models/dqn_flappy_strong_best.pth`: tuned stability-first demo model
 
 ## Requirements
 
@@ -92,9 +92,11 @@ Notes:
 - `models/dqn_flappy_50_best.pth` is a weak model for comparison
 - `models/dqn_flappy_500_best.pth` is a medium model for comparison
 - `models/dqn_flappy_1000_best.pth` is the strong score-base model in this repository
-- `models/dqn_flappy_strong_best.pth` is the strongest tuned demo model in this repository
+- `models/dqn_flappy_strong_best.pth` is a separately tuned stability-first model
 - `python play.py --games 1` now defaults to the strongest AI model automatically
 - the first four commands let you choose the AI brain explicitly before watching
+- `dqn_flappy_1000_best.pth` can spike to a higher score in some runs
+- `dqn_flappy_strong_best.pth` was tuned to reduce early failures and be more stable across runs
 - in Quick demo mode, you do not need to run `train.py`
 - if you already trained a weak model and overwrote files locally, download the latest ZIP from GitHub again to restore the backup models
 
@@ -144,7 +146,7 @@ python play.py --model .\models\dqn_flappy_1000_best.pth --games 1
 Strong tuned training example:
 
 ```bash
-python train.py --episodes 2000 --resume-from .\models\dqn_flappy_1000_best.pth --start-epsilon 0.10 --epsilon-min 0.02 --epsilon-decay 0.999 --best-model .\models\dqn_flappy_strong_best.pth --final-model .\models\dqn_flappy_strong_final.pth --plot training_progress_strong.png
+python train.py --episodes 1500 --resume-from .\models\dqn_flappy_1000_best.pth --best-model .\models\dqn_flappy_strong_best.pth --final-model .\models\dqn_flappy_strong_final.pth --plot training_progress_strong.png --checkpoint-label strong_base --hidden-sizes 64,64 --start-epsilon 0.05 --epsilon-min 0.01 --epsilon-decay 0.99997 --learning-rate 0.0003 --batch-size 128 --memory-capacity 50000 --double-dqn --loss-type huber --grad-clip 5 --learning-starts 128 --target-update-steps 1000 --eval-interval 100 --eval-games 12 --eval-score-limit 150 --failure-threshold 10 --stability-bonus 0.05
 python play.py --model .\models\dqn_flappy_strong_best.pth --games 1
 ```
 
@@ -197,7 +199,7 @@ Safer comparison examples:
 python train.py --episodes 50 --best-model .\models\dqn_flappy_50_best.pth --final-model .\models\dqn_flappy_50_final.pth --plot training_progress_50.png
 python train.py --episodes 500 --best-model .\models\dqn_flappy_500_best.pth --final-model .\models\dqn_flappy_500_final.pth --plot training_progress_500.png
 python train.py --episodes 1000 --best-model .\models\dqn_flappy_1000_best.pth --final-model .\models\dqn_flappy_1000_final.pth --plot training_progress_1000.png
-python train.py --episodes 2000 --resume-from .\models\dqn_flappy_1000_best.pth --start-epsilon 0.10 --epsilon-min 0.02 --epsilon-decay 0.999 --best-model .\models\dqn_flappy_strong_best.pth --final-model .\models\dqn_flappy_strong_final.pth --plot training_progress_strong.png
+python train.py --episodes 1500 --resume-from .\models\dqn_flappy_1000_best.pth --best-model .\models\dqn_flappy_strong_best.pth --final-model .\models\dqn_flappy_strong_final.pth --plot training_progress_strong.png --checkpoint-label strong_base --hidden-sizes 64,64 --start-epsilon 0.05 --epsilon-min 0.01 --epsilon-decay 0.99997 --learning-rate 0.0003 --batch-size 128 --memory-capacity 50000 --double-dqn --loss-type huber --grad-clip 5 --learning-starts 128 --target-update-steps 1000 --eval-interval 100 --eval-games 12 --eval-score-limit 150 --failure-threshold 10 --stability-bonus 0.05
 ```
 
 ## Watch the AI play
@@ -251,7 +253,7 @@ The game environment is the same in both. The main difference is who chooses the
 - `models/dqn_flappy_50_best.pth`: weak checkpoint for comparison
 - `models/dqn_flappy_500_best.pth`: medium checkpoint for comparison
 - `models/dqn_flappy_1000_best.pth`: strong score-base checkpoint for comparison
-- `models/dqn_flappy_strong_best.pth`: strongest tuned checkpoint for comparison
+- `models/dqn_flappy_strong_best.pth`: separately tuned stability-first checkpoint for comparison
 - `README_WORKSHOP.md`: extra workshop notes
 - `training_progress_1000.png`: sample training curve
 

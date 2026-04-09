@@ -6,7 +6,7 @@ import flappy_bird_gymnasium
 import gymnasium as gym
 import pygame
 
-from agent import DQNAgent
+from agent import DQNAgent, load_checkpoint
 
 
 DEFAULT_MODEL_PATH = "models/dqn_flappy_strong_best.pth"
@@ -39,12 +39,27 @@ def play(model_path=DEFAULT_MODEL_PATH, num_games=3, render=True, fps=30):
 
     print(f"Loading model from: {resolved_model_path}")
 
+    _, checkpoint_config, checkpoint_metadata = load_checkpoint(resolved_model_path, map_location="cpu")
+    use_lidar = bool(checkpoint_metadata.get("use_lidar", False))
     render_mode = "human" if render else None
-    env = gym.make("FlappyBird-v0", render_mode=render_mode, use_lidar=False)
+    env = gym.make("FlappyBird-v0", render_mode=render_mode, use_lidar=use_lidar)
 
     state_size = env.observation_space.shape[0]
     action_size = env.action_space.n
-    agent = DQNAgent(state_size=state_size, action_size=action_size)
+    hidden_sizes = tuple(checkpoint_config.get("hidden_sizes", (64, 64)))
+    agent = DQNAgent(
+        state_size=state_size,
+        action_size=action_size,
+        hidden_sizes=hidden_sizes,
+        gamma=checkpoint_config.get("gamma", 0.99),
+        epsilon_min=checkpoint_config.get("epsilon_min", 0.01),
+        epsilon_decay=checkpoint_config.get("epsilon_decay", 0.995),
+        learning_rate=checkpoint_config.get("learning_rate", 0.001),
+        batch_size=checkpoint_config.get("batch_size", 64),
+        use_double_dqn=checkpoint_config.get("use_double_dqn", False),
+        loss_type=checkpoint_config.get("loss_type", "mse"),
+        grad_clip=checkpoint_config.get("grad_clip"),
+    )
     agent.load(resolved_model_path)
 
     for game_idx in range(num_games):
