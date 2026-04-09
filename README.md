@@ -347,15 +347,6 @@ Quick tuning notes for classroom discussion after students compare the training 
 - the tuned Strong model uses Double DQN, Huber loss, a lower learning rate, a larger batch size, a larger replay buffer, gradient clipping, and multi-game evaluation when selecting the best checkpoint
 - in our tests, Strong reduced early low-score failures compared with `1000`, but it still cannot guarantee a perfect run every time because the pipe patterns are still variable and DQN is still an approximate policy
 
-## Human vs AI version
-
-The two important files to compare are:
-
-- `manual_play.py`: action comes from keyboard input
-- `play.py`: action comes from `agent.select_action(state)`
-
-The game environment is the same in both. The main difference is who chooses the action.
-
 ## Training notes
 
 This repository includes multiple checkpoints so the class can compare different behaviors without retraining everything from scratch.
