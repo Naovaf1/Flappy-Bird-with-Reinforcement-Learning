@@ -41,13 +41,10 @@ pip install -r requirements.txt
 python check_env.py
 ```
 
-## Choose your path
+## Path A: Quick demo
 
-After setup, this project can be used in two different ways:
-
-### Path A: Quick demo
-
-Use this if you just want to try the game and see the AI work.
+Use this path if you only want to try the project and see the final result.
+This path is only for demo, not for training.
 
 1. Run the game yourself:
 
@@ -61,45 +58,15 @@ python manual_play.py
 python play.py --model .\models\dqn_flappy_best.pth --games 1
 ```
 
-3. If you want to train a new model, run:
+Notes:
 
-```bash
-python train.py --episodes 50
-```
+- `models/dqn_flappy_best.pth` is the backup trained model included in the repository
+- in Quick demo mode, you do not need to run `train.py`
+- if you already trained a weak model and overwrote the backup file, download the latest ZIP from GitHub again to restore the original backup model
 
-or
+## Path B: Workshop mode
 
-```bash
-python train.py --episodes 1000 --plot training_progress_1000.png
-```
-
-Then run `play.py` again to see the newly trained model.
-
-Important:
-
-- `python train.py` writes model checkpoints into the `models/` folder
-- by default it overwrites `models/dqn_flappy_best.pth` and `models/dqn_flappy_final.pth`
-- if you want to keep the original backup model, train into a different filename
-
-Example:
-
-```bash
-python train.py --episodes 50 --best-model .\models\dqn_flappy_50_best.pth --final-model .\models\dqn_flappy_50_final.pth --plot training_progress_50.png
-python play.py --model .\models\dqn_flappy_50_best.pth --games 1
-```
-
-Longer training example:
-
-```bash
-python train.py --episodes 1000 --best-model .\models\dqn_flappy_1000_best.pth --final-model .\models\dqn_flappy_1000_final.pth --plot training_progress_1000.png
-python play.py --model .\models\dqn_flappy_1000_best.pth --games 1
-```
-
-This makes it easy to compare a weaker model and a stronger model without confusion.
-
-### Path B: Workshop mode
-
-Use this if you want students to complete the missing logic themselves.
+Use this path if students are going to complete missing logic and train their own models.
 
 1. Run the game yourself first:
 
@@ -117,12 +84,29 @@ python manual_play.py
 - `agent.py`
 - `train.py`
 
-4. After the skeleton is complete, train and test:
+4. Train and compare multiple models.
+
+Short training example:
 
 ```bash
-python train.py --episodes 50
-python play.py --model .\models\dqn_flappy_best.pth --games 1
+python train.py --episodes 50 --best-model .\models\dqn_flappy_50_best.pth --final-model .\models\dqn_flappy_50_final.pth --plot training_progress_50.png
+python play.py --model .\models\dqn_flappy_50_best.pth --games 1
 ```
+
+Longer training example:
+
+```bash
+python train.py --episodes 1000 --best-model .\models\dqn_flappy_1000_best.pth --final-model .\models\dqn_flappy_1000_final.pth --plot training_progress_1000.png
+python play.py --model .\models\dqn_flappy_1000_best.pth --games 1
+```
+
+This makes it easy to compare a weaker model and a stronger model without confusion.
+
+Important:
+
+- by default, `train.py` overwrites `models/dqn_flappy_best.pth` and `models/dqn_flappy_final.pth`
+- use `--best-model` and `--final-model` if you want to keep multiple checkpoints
+- if your local copy says `unrecognized arguments: --best-model`, your ZIP is from an older version of the repository and you should download the latest ZIP again
 
 ## Run the game yourself
 
@@ -147,7 +131,7 @@ Warning:
 - by default, training overwrites `models/dqn_flappy_best.pth`
 - if you want to compare multiple trained models, use `--best-model` and `--final-model` with different filenames
 
-Short demo run:
+Simple run:
 
 ```bash
 python train.py --episodes 50
@@ -159,8 +143,6 @@ Longer run:
 python train.py --episodes 1000 --plot training_progress_1000.png
 ```
 
-This saves model checkpoints into the `models/` folder.
-
 Safer comparison examples:
 
 ```bash
@@ -170,11 +152,13 @@ python train.py --episodes 1000 --best-model .\models\dqn_flappy_1000_best.pth -
 
 ## Watch the AI play
 
+Backup model:
+
 ```bash
 python play.py --model .\models\dqn_flappy_best.pth --games 1
 ```
 
-Or choose a specific trained model:
+Specific trained models:
 
 ```bash
 python play.py --model .\models\dqn_flappy_50_best.pth --games 1
@@ -192,12 +176,14 @@ Recommended classroom sequence:
 
 1. `python check_env.py`
 2. `python manual_play.py`
-3. explain the difference between `manual_play.py` and `play.py`
-4. open and complete `skeleton/agent_skeleton.py`
-5. open and complete `skeleton/train_skeleton.py`
-6. compare with `agent.py` and `train.py`
-7. `python train.py --episodes 50`
-8. `python play.py --model .\models\dqn_flappy_best.pth --games 1`
+3. `python play.py --model .\models\dqn_flappy_best.pth --games 1`
+4. explain the difference between `manual_play.py` and `play.py`
+5. open and complete `skeleton/agent_skeleton.py`
+6. open and complete `skeleton/train_skeleton.py`
+7. compare with `agent.py` and `train.py`
+8. train a short model and play it
+9. train a longer model and play it
+10. compare the results
 
 ## Human vs AI version
 
@@ -216,11 +202,7 @@ The game environment is the same in both. The main difference is who chooses the
 
 ## Troubleshooting
 
-If `play.py` says the model is missing, run:
-
-```bash
-python train.py --episodes 50
-```
+If `play.py` says the model is missing, or the backup model was accidentally overwritten, download the latest ZIP from GitHub again.
 
 If a game window does not open, verify the environment first:
 
