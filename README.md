@@ -41,6 +41,67 @@ pip install -r requirements.txt
 python check_env.py
 ```
 
+## Choose your path
+
+After setup, this project can be used in two different ways:
+
+### Path A: Quick demo
+
+Use this if you just want to try the game and see the AI work.
+
+1. Run the game yourself:
+
+```bash
+python manual_play.py
+```
+
+2. Watch the backup AI model play:
+
+```bash
+python play.py --model .\models\dqn_flappy_best.pth --games 1
+```
+
+3. If you want to train a new model, run:
+
+```bash
+python train.py --episodes 50
+```
+
+or
+
+```bash
+python train.py --episodes 1000 --plot training_progress_1000.png
+```
+
+Then run `play.py` again to see the newly trained model.
+
+### Path B: Workshop mode
+
+Use this if you want students to complete the missing logic themselves.
+
+1. Run the game yourself first:
+
+```bash
+python manual_play.py
+```
+
+2. Open and complete:
+
+- `skeleton/agent_skeleton.py`
+- `skeleton/train_skeleton.py`
+
+3. Compare with the reference files if needed:
+
+- `agent.py`
+- `train.py`
+
+4. After the skeleton is complete, train and test:
+
+```bash
+python train.py --episodes 50
+python play.py --model .\models\dqn_flappy_best.pth --games 1
+```
+
 ## Run the game yourself
 
 ```bash
@@ -54,6 +115,10 @@ Controls:
 - `Esc`: quit
 
 ## Train the AI
+
+These commands use the completed reference files `agent.py` and `train.py`.
+
+If you are running the workshop exercise, finish the skeleton files first.
 
 Short demo run:
 
@@ -86,10 +151,12 @@ Recommended classroom sequence:
 
 1. `python check_env.py`
 2. `python manual_play.py`
-3. open and complete `skeleton/agent_skeleton.py`
-4. open and complete `skeleton/train_skeleton.py`
-5. `python train.py --episodes 50`
-6. `python play.py --model .\models\dqn_flappy_best.pth --games 1`
+3. explain the difference between `manual_play.py` and `play.py`
+4. open and complete `skeleton/agent_skeleton.py`
+5. open and complete `skeleton/train_skeleton.py`
+6. compare with `agent.py` and `train.py`
+7. `python train.py --episodes 50`
+8. `python play.py --model .\models\dqn_flappy_best.pth --games 1`
 
 ## Human vs AI version
 
