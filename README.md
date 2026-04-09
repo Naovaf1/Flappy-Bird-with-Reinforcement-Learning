@@ -100,6 +100,32 @@ Notes:
 - in Quick demo mode, you do not need to run `train.py`
 - if you already trained a weak model and overwrote files locally, download the latest ZIP from GitHub again to restore the backup models
 
+## 1000 vs Strong
+
+Quick tuning notes for classroom discussion:
+
+- `dqn_flappy_1000_best.pth` is the higher-risk, higher-peak score-base model
+- `dqn_flappy_strong_best.pth` is a separate tuned model that focuses more on stability
+- the tuned Strong model uses Double DQN, Huber loss, a lower learning rate, a larger batch size, a larger replay buffer, gradient clipping, and multi-game evaluation when selecting the best checkpoint
+- in our tests, Strong reduced early low-score failures compared with `1000`, but it still cannot guarantee a perfect run every time because the pipe patterns are still variable and DQN is still an approximate policy
+
+## Workshop flow
+
+Recommended classroom sequence:
+
+1. `python check_env.py`
+2. `python manual_play.py`
+3. `python play.py --model .\models\dqn_flappy_50_best.pth --games 1`
+4. `python play.py --model .\models\dqn_flappy_500_best.pth --games 1`
+5. `python play.py --model .\models\dqn_flappy_1000_best.pth --games 1`
+6. `python play.py --model .\models\dqn_flappy_strong_best.pth --games 1`
+7. explain the difference between `manual_play.py` and `play.py`
+8. open and complete `skeleton/agent_skeleton.py`
+9. open and complete `skeleton/train_skeleton.py`
+10. compare with `agent.py` and `train.py`
+11. train a short model and play it
+12. train a longer model and compare the results
+
 ## Path B: Workshop mode
 
 Use this path if students are going to complete missing logic and train their own models.
@@ -157,87 +183,6 @@ Important:
 - by default, `train.py` overwrites `models/dqn_flappy_best.pth` and `models/dqn_flappy_final.pth`
 - use `--best-model` and `--final-model` if you want to keep multiple checkpoints
 - if your local copy says `unrecognized arguments: --best-model`, your ZIP is from an older version of the repository and you should download the latest ZIP again
-
-## Run the game yourself
-
-```bash
-python manual_play.py
-```
-
-Controls:
-
-- `Space` or `Up Arrow`: flap
-- `R`: restart after game over
-- `Esc`: quit
-
-## Train the AI
-
-These commands use the completed reference files `agent.py` and `train.py`.
-
-If you are running the workshop exercise, finish the skeleton files first.
-
-Warning:
-
-- by default, training overwrites `models/dqn_flappy_best.pth`
-- if you want to compare multiple trained models, use `--best-model` and `--final-model` with different filenames
-
-Simple run:
-
-```bash
-python train.py --episodes 50
-```
-
-Longer run:
-
-```bash
-python train.py --episodes 1000 --plot training_progress_1000.png
-```
-
-Safer comparison examples:
-
-```bash
-python train.py --episodes 50 --best-model .\models\dqn_flappy_50_best.pth --final-model .\models\dqn_flappy_50_final.pth --plot training_progress_50.png
-python train.py --episodes 500 --best-model .\models\dqn_flappy_500_best.pth --final-model .\models\dqn_flappy_500_final.pth --plot training_progress_500.png
-python train.py --episodes 1000 --best-model .\models\dqn_flappy_1000_best.pth --final-model .\models\dqn_flappy_1000_final.pth --plot training_progress_1000.png
-python train.py --episodes 1500 --resume-from .\models\dqn_flappy_1000_best.pth --best-model .\models\dqn_flappy_strong_best.pth --final-model .\models\dqn_flappy_strong_final.pth --plot training_progress_strong.png --checkpoint-label strong_base --hidden-sizes 64,64 --start-epsilon 0.05 --epsilon-min 0.01 --epsilon-decay 0.99997 --learning-rate 0.0003 --batch-size 128 --memory-capacity 50000 --double-dqn --loss-type huber --grad-clip 5 --learning-starts 128 --target-update-steps 1000 --eval-interval 100 --eval-games 12 --eval-score-limit 150 --failure-threshold 10 --stability-bonus 0.05
-```
-
-## Watch the AI play
-
-Backup model:
-
-```bash
-python play.py --games 1
-```
-
-Specific trained models:
-
-```bash
-python play.py --model .\models\dqn_flappy_50_best.pth --games 1
-python play.py --model .\models\dqn_flappy_500_best.pth --games 1
-python play.py --model .\models\dqn_flappy_1000_best.pth --games 1
-python play.py --model .\models\dqn_flappy_strong_best.pth --games 1
-```
-
-Controls while watching:
-
-- close the window to stop
-- `Esc` to stop
-
-## Workshop flow
-
-Recommended classroom sequence:
-
-1. `python check_env.py`
-2. `python manual_play.py`
-3. `python play.py --model .\models\dqn_flappy_best.pth --games 1`
-4. explain the difference between `manual_play.py` and `play.py`
-5. open and complete `skeleton/agent_skeleton.py`
-6. open and complete `skeleton/train_skeleton.py`
-7. compare with `agent.py` and `train.py`
-8. train a short model and play it
-9. train a longer model and play it
-10. compare the results
 
 ## Human vs AI version
 
