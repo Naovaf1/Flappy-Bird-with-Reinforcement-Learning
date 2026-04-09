@@ -100,15 +100,6 @@ Notes:
 - in Quick demo mode, you do not need to run `train.py`
 - if you already trained a weak model and overwrote files locally, download the latest ZIP from GitHub again to restore the backup models
 
-## 1000 vs Strong
-
-Quick tuning notes for classroom discussion:
-
-- `dqn_flappy_1000_best.pth` is the higher-risk, higher-peak score-base model
-- `dqn_flappy_strong_best.pth` is a separate tuned model that focuses more on stability
-- the tuned Strong model uses Double DQN, Huber loss, a lower learning rate, a larger batch size, a larger replay buffer, gradient clipping, and multi-game evaluation when selecting the best checkpoint
-- in our tests, Strong reduced early low-score failures compared with `1000`, but it still cannot guarantee a perfect run every time because the pipe patterns are still variable and DQN is still an approximate policy
-
 ## Workshop flow
 
 Recommended classroom sequence:
@@ -183,6 +174,15 @@ Important:
 - by default, `train.py` overwrites `models/dqn_flappy_best.pth` and `models/dqn_flappy_final.pth`
 - use `--best-model` and `--final-model` if you want to keep multiple checkpoints
 - if your local copy says `unrecognized arguments: --best-model`, your ZIP is from an older version of the repository and you should download the latest ZIP again
+
+## 1000 vs Strong
+
+Quick tuning notes for classroom discussion after students compare the training results:
+
+- `dqn_flappy_1000_best.pth` is the higher-risk, higher-peak score-base model
+- `dqn_flappy_strong_best.pth` is a separate tuned model that focuses more on stability
+- the tuned Strong model uses Double DQN, Huber loss, a lower learning rate, a larger batch size, a larger replay buffer, gradient clipping, and multi-game evaluation when selecting the best checkpoint
+- in our tests, Strong reduced early low-score failures compared with `1000`, but it still cannot guarantee a perfect run every time because the pipe patterns are still variable and DQN is still an approximate policy
 
 ## Human vs AI version
 
