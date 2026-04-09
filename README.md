@@ -199,7 +199,6 @@ The game environment is the same in both. The main difference is who chooses the
 - `models/dqn_flappy_500_best.pth`: medium checkpoint for comparison
 - `models/dqn_flappy_1000_best.pth`: strong score-base checkpoint for comparison
 - `models/dqn_flappy_strong_best.pth`: separately tuned stability-first checkpoint for comparison
-- `README_WORKSHOP.md`: extra workshop notes
 - `training_progress_1000.png`: sample training curve
 
 ## Troubleshooting
