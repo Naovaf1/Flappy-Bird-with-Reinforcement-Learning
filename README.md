@@ -338,16 +338,7 @@ Important:
 - use `--best-model` and `--final-model` if you want to keep multiple checkpoints
 - if your local copy says `unrecognized arguments: --best-model`, your ZIP is from an older version of the repository and you should download the latest ZIP again
 
-## 1000 vs Strong
-
-Quick tuning notes for classroom discussion after students compare the training results:
-
-- `dqn_flappy_1000_best.pth` is the higher-risk, higher-peak score-base model
-- `dqn_flappy_strong_best.pth` is a separate tuned model that focuses more on stability
-- the tuned Strong model uses Double DQN, Huber loss, a lower learning rate, a larger batch size, a larger replay buffer, gradient clipping, and multi-game evaluation when selecting the best checkpoint
-- in our tests, Strong reduced early low-score failures compared with `1000`, but it still cannot guarantee a perfect run every time because the pipe patterns are still variable and DQN is still an approximate policy
-
-## Training notes
+## Training notes and model comparison
 
 This repository includes multiple checkpoints so the class can compare different behaviors without retraining everything from scratch.
 
@@ -356,7 +347,11 @@ This repository includes multiple checkpoints so the class can compare different
 - `1000` is a strong score-oriented model
 - `Strong` is a tuned follow-up model that prioritizes stability more than peak score
 
-The tuned `Strong` version keeps the same general project structure but changes how the model is trained and selected. Compared with the `1000` version, it adds a more stability-focused training setup with Double DQN, Huber loss, a lower learning rate, a larger batch size, a larger replay buffer, gradient clipping, and multi-game evaluation for checkpoint selection.
+The most important classroom comparison is `1000` versus `Strong`:
+
+- `dqn_flappy_1000_best.pth` is the higher-risk, higher-peak score-base model
+- `dqn_flappy_strong_best.pth` is a separate tuned model that focuses more on stability
+- compared with `1000`, the tuned `Strong` version adds Double DQN, Huber loss, a lower learning rate, a larger batch size, a larger replay buffer, gradient clipping, and multi-game evaluation for checkpoint selection
 
 This does not guarantee a perfect run every time. Flappy Bird still contains variation, and DQN is still an approximate method. The practical goal is to reduce early failures and make the demo behavior more reliable.
 
