@@ -63,6 +63,10 @@ Controls:
 
 2. Watch the backup AI model play.
 
+The numbers `50`, `500`, and `1000` are training episode counts.
+They represent how long each AI brain was trained before saving the checkpoint.
+In general, a model trained for more episodes should perform better, but the goal here is to let you compare weak, medium, strong, and tuned-stable behavior side by side.
+
 Choose the AI brain first:
 
 ```bash
