@@ -119,8 +119,8 @@ class DQNAgent:
         """Save model"""
         torch.save(self.policy_net.state_dict(), path)
     
-    def load(self, path):
-        """Load model"""
+    def load(self, path, epsilon=0.0):
+        """Load model weights and optionally set epsilon."""
         self.policy_net.load_state_dict(torch.load(path, map_location=self.device))
         self.target_net.load_state_dict(self.policy_net.state_dict())
-        self.epsilon = 0.0 # ไม่สุ่มอีกต่อไป เพราะจะเล่นจริง
+        self.epsilon = epsilon # ไม่สุ่มอีกต่อไป เพราะจะเล่นจริง

@@ -17,8 +17,8 @@ The goal is not to build Flappy Bird from scratch. The goal is to start from an 
 - `skeleton/agent_skeleton.py`: incomplete workshop version for students
 - `skeleton/train_skeleton.py`: incomplete workshop version for students
 - `models/dqn_flappy_50_best.pth`: weak demo model
-- `models/dqn_flappy_500_best.pth`: medium demo model
-- `models/dqn_flappy_1000_best.pth`: strong demo model
+- `models/dqn_flappy_450_best.pth`: medium demo model
+- `models/dqn_flappy_strong_best.pth`: strongest demo model
 
 ## Requirements
 
@@ -62,30 +62,33 @@ Controls:
 
 2. Watch the backup AI model play.
 
-Recommended quick demo choices:
-
-```bash
-python play.py --games 1
-```
+Choose the AI brain first:
 
 ```bash
 python play.py --model .\models\dqn_flappy_50_best.pth --games 1
 ```
 
 ```bash
-python play.py --model .\models\dqn_flappy_500_best.pth --games 1
+python play.py --model .\models\dqn_flappy_450_best.pth --games 1
 ```
 
 ```bash
-python play.py --model .\models\dqn_flappy_1000_best.pth --games 1
+python play.py --model .\models\dqn_flappy_strong_best.pth --games 1
+```
+
+Default AI playback:
+
+```bash
+python play.py --games 1
 ```
 
 Notes:
 
 - `models/dqn_flappy_50_best.pth` is a weak model for comparison
-- `models/dqn_flappy_500_best.pth` is a medium model for comparison
-- `models/dqn_flappy_1000_best.pth` is the strongest demo model in this repository
-- `python play.py --games 1` now defaults to the 1000-episode model
+- `models/dqn_flappy_450_best.pth` is a medium model for comparison
+- `models/dqn_flappy_strong_best.pth` is the strongest demo model in this repository
+- `python play.py --games 1` now defaults to the strongest AI model automatically
+- the first three commands let you choose the AI brain explicitly before watching
 - in Quick demo mode, you do not need to run `train.py`
 - if you already trained a weak model and overwrote files locally, download the latest ZIP from GitHub again to restore the backup models
 
@@ -121,15 +124,16 @@ python play.py --model .\models\dqn_flappy_50_best.pth --games 1
 Medium training example:
 
 ```bash
-python train.py --episodes 500 --best-model .\models\dqn_flappy_500_best.pth --final-model .\models\dqn_flappy_500_final.pth --plot training_progress_500.png
-python play.py --model .\models\dqn_flappy_500_best.pth --games 1
+python train.py --episodes 450 --best-model .\models\dqn_flappy_450_best.pth --final-model .\models\dqn_flappy_450_final.pth --plot training_progress_450.png
+python play.py --model .\models\dqn_flappy_450_best.pth --games 1
 ```
 
-Longer training example:
+Stronger training example:
 
 ```bash
 python train.py --episodes 1000 --best-model .\models\dqn_flappy_1000_best.pth --final-model .\models\dqn_flappy_1000_final.pth --plot training_progress_1000.png
-python play.py --model .\models\dqn_flappy_1000_best.pth --games 1
+python train.py --episodes 2000 --resume-from .\models\dqn_flappy_1000_best.pth --start-epsilon 0.10 --epsilon-min 0.02 --epsilon-decay 0.999 --best-model .\models\dqn_flappy_strong_best.pth --final-model .\models\dqn_flappy_strong_final.pth --plot training_progress_strong.png
+python play.py --model .\models\dqn_flappy_strong_best.pth --games 1
 ```
 
 This makes it easy to compare a weaker model and a stronger model without confusion.
@@ -179,8 +183,9 @@ Safer comparison examples:
 
 ```bash
 python train.py --episodes 50 --best-model .\models\dqn_flappy_50_best.pth --final-model .\models\dqn_flappy_50_final.pth --plot training_progress_50.png
-python train.py --episodes 500 --best-model .\models\dqn_flappy_500_best.pth --final-model .\models\dqn_flappy_500_final.pth --plot training_progress_500.png
+python train.py --episodes 450 --best-model .\models\dqn_flappy_450_best.pth --final-model .\models\dqn_flappy_450_final.pth --plot training_progress_450.png
 python train.py --episodes 1000 --best-model .\models\dqn_flappy_1000_best.pth --final-model .\models\dqn_flappy_1000_final.pth --plot training_progress_1000.png
+python train.py --episodes 2000 --resume-from .\models\dqn_flappy_1000_best.pth --start-epsilon 0.10 --epsilon-min 0.02 --epsilon-decay 0.999 --best-model .\models\dqn_flappy_strong_best.pth --final-model .\models\dqn_flappy_strong_final.pth --plot training_progress_strong.png
 ```
 
 ## Watch the AI play
@@ -195,8 +200,8 @@ Specific trained models:
 
 ```bash
 python play.py --model .\models\dqn_flappy_50_best.pth --games 1
-python play.py --model .\models\dqn_flappy_500_best.pth --games 1
-python play.py --model .\models\dqn_flappy_1000_best.pth --games 1
+python play.py --model .\models\dqn_flappy_450_best.pth --games 1
+python play.py --model .\models\dqn_flappy_strong_best.pth --games 1
 ```
 
 Controls while watching:
@@ -231,8 +236,8 @@ The game environment is the same in both. The main difference is who chooses the
 ## Backup material
 
 - `models/dqn_flappy_50_best.pth`: weak checkpoint for comparison
-- `models/dqn_flappy_500_best.pth`: medium checkpoint for comparison
-- `models/dqn_flappy_1000_best.pth`: strong checkpoint for comparison
+- `models/dqn_flappy_450_best.pth`: medium checkpoint for comparison
+- `models/dqn_flappy_strong_best.pth`: strong checkpoint for comparison
 - `README_WORKSHOP.md`: extra workshop notes
 - `training_progress_1000.png`: sample training curve
 

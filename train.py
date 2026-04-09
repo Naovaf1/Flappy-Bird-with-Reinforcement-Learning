@@ -1,9 +1,11 @@
 import argparse
 import os
+import random
 
 import flappy_bird_gymnasium
 import gymnasium as gym
 import matplotlib.pyplot as plt
+import numpy as np
 
 from agent import DQNAgent
 
@@ -13,16 +15,37 @@ def train(
     render=False,
     best_model_path="models/dqn_flappy_best.pth",
     final_model_path="models/dqn_flappy_final.pth",
+    resume_from=None,
+    start_epsilon=None,
+    epsilon_min=None,
+    epsilon_decay=None,
+    target_update=10,
+    seed=42,
 ):
     """Main training loop for the Flappy Bird DQN agent."""
     print(f"Starting training for {num_episodes} episodes...")
+    random.seed(seed)
+    np.random.seed(seed)
 
     env_mode = "human" if render else None
     env = gym.make("FlappyBird-v0", render_mode=env_mode, use_lidar=False)
+    env.reset(seed=seed)
+    env.action_space.seed(seed)
 
     state_size = env.observation_space.shape[0]
     action_size = env.action_space.n
     agent = DQNAgent(state_size=state_size, action_size=action_size)
+
+    if resume_from:
+        agent.load(resume_from, epsilon=agent.epsilon)
+        print(f"Resumed training from: {resume_from}")
+
+    if start_epsilon is not None:
+        agent.epsilon = start_epsilon
+    if epsilon_min is not None:
+        agent.epsilon_min = epsilon_min
+    if epsilon_decay is not None:
+        agent.epsilon_decay = epsilon_decay
 
     scores = []
     best_score = float("-inf")
@@ -47,7 +70,7 @@ def train(
 
         scores.append(total_reward)
 
-        if episode % 10 == 0:
+        if episode % max(target_update, 1) == 0:
             agent.update_target_network()
 
         if total_reward > best_score:
@@ -120,6 +143,37 @@ if __name__ == "__main__":
         default="models/dqn_flappy_final.pth",
         help="Path for the final checkpoint saved at the end of training.",
     )
+    parser.add_argument(
+        "--resume-from",
+        help="Optional checkpoint to continue training from.",
+    )
+    parser.add_argument(
+        "--start-epsilon",
+        type=float,
+        help="Override the starting epsilon for exploration.",
+    )
+    parser.add_argument(
+        "--epsilon-min",
+        type=float,
+        help="Override the minimum epsilon.",
+    )
+    parser.add_argument(
+        "--epsilon-decay",
+        type=float,
+        help="Override the epsilon decay rate.",
+    )
+    parser.add_argument(
+        "--target-update",
+        type=int,
+        default=10,
+        help="Episodes between target network syncs.",
+    )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=42,
+        help="Random seed for reproducible runs.",
+    )
     args = parser.parse_args()
 
     scores = train(
@@ -127,5 +181,11 @@ if __name__ == "__main__":
         render=args.render,
         best_model_path=args.best_model,
         final_model_path=args.final_model,
+        resume_from=args.resume_from,
+        start_epsilon=args.start_epsilon,
+        epsilon_min=args.epsilon_min,
+        epsilon_decay=args.epsilon_decay,
+        target_update=args.target_update,
+        seed=args.seed,
     )
     plot_scores(scores, output_path=args.plot)

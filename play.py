@@ -9,7 +9,7 @@ import pygame
 from agent import DQNAgent
 
 
-DEFAULT_MODEL_PATH = "models/dqn_flappy_1000_best.pth"
+DEFAULT_MODEL_PATH = "models/dqn_flappy_strong_best.pth"
 
 
 def resolve_model_path(model_path):
@@ -18,8 +18,10 @@ def resolve_model_path(model_path):
 
     for candidate in (
         DEFAULT_MODEL_PATH,
-        "models/dqn_flappy_500_best.pth",
+        "models/dqn_flappy_1000_best.pth",
+        "models/dqn_flappy_450_best.pth",
         "models/dqn_flappy_50_best.pth",
+        "models/dqn_flappy_500_best.pth",
         "models/dqn_flappy_best.pth",
         "models/dqn_flappy_final.pth",
     ):
