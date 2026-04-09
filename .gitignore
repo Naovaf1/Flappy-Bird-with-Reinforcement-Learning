@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+env/
+
+notes/
+clips/
+
+training_progress.png
+training_progress_200.png
+
+.DS_Store
+Thumbs.db

@@ -1,0 +1,7 @@
+flappy-bird-gymnasium==0.4.0
+gymnasium==0.29.1
+torch
+torchvision
+numpy
+matplotlib
+pygame
