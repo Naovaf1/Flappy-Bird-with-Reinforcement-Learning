@@ -205,10 +205,10 @@ Recommended classroom sequence:
 2. `python manual_play.py`
 3. `python play.py --model .\models\dqn_flappy_50_best.pth --games 1`
 4. `python play.py --model .\models\dqn_flappy_500_best.pth --games 1`
-5. `python play.py --model .\models\dqn_flappy_1000_best.pth --games 1`
-6. `python play.py --model .\models\dqn_flappy_strong_best.pth --games 1`
-7. explain the difference between `manual_play.py` and `play.py`
-8. show the three baseline graphs: `50`, `500`, `3000`
+5. show `training_progress_50.png`
+6. show `training_progress_500.png`
+7. show `training_progress_3000.png`
+8. explain the difference between `manual_play.py` and `play.py`
 9. explain why more episodes alone are not enough
 10. move to Google Colab and open `tuning_lab.ipynb`
 11. upload the full project ZIP to Colab
