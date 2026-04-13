@@ -93,10 +93,10 @@ The classroom goal is simple:
 - explain the core RL ideas behind the project
 - use Colab to tune hyperparameters and generate comparison graphs
 
-## Path A: Quick demo
+## Demo in class
 
-Use this path if you only want to try the project and see the final result.
-This path is only for demo, not for training.
+Use this section for the live classroom presentation.
+This is the local demo flow, not the tuning flow.
 
 1. Run the game yourself:
 
@@ -155,14 +155,14 @@ Notes:
 - in Quick demo mode, you do not need to run `train.py`
 - if you already trained a weak model and overwrote files locally, download the latest ZIP from GitHub again to restore the backup models
 
-## Colab tuning lab
+## Hyperparameter tuning in Colab
 
-Use this path when you want to experiment with hyperparameters and generate training-progress graphs for comparison.
+Use this section when you want to experiment with hyperparameters and generate training-progress graphs for comparison.
 
 Important separation:
 
-- local PowerShell / CMD is the recommended path for the live class demo
-- Google Colab is the recommended path for tuning experiments and graph generation
+- local PowerShell / CMD is used for the live class demo
+- Google Colab is used for tuning experiments and graph generation
 
 Recommended flow:
 
