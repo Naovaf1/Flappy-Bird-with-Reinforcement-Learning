@@ -142,7 +142,8 @@ Notes:
 - `training_progress_3000.png` is the long-training comparison graph used in slides
 - `models/dqn_flappy_1000_best.pth` and `models/dqn_flappy_strong_best.pth` may still exist as supporting checkpoints, but they are not part of the main classroom demo sequence
 - `python play.py --games 1` uses the default model configured in `play.py`
-- for the current classroom plan, the local playback sequence focuses on `50` and `500`, then moves to the three graphs `50`, `500`, and `3000`
+- for the current classroom plan, the classroom demo story is `50`, `500`, and `3000`
+- in practice, `50` and `500` are shown through local playback, while `3000` is shown through the training-progress graph
 - in the classroom demo, you do not need to run `train.py`
 - if you already trained a weak model and overwrote files locally, download the latest ZIP from GitHub again to restore the backup models
 
