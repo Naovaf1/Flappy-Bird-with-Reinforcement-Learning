@@ -9,18 +9,19 @@ The goal is not to build Flappy Bird from scratch. The goal is to start from an 
 
 ## What is inside
 
+Core files used in the current teaching plan:
+
 - `manual_play.py`: play the game yourself with the keyboard
-- `train.py`: train a DQN agent
-- `play.py`: load a trained model and watch the AI play
-- `check_env.py`: quick environment check
+- `play.py`: load a prepared model and watch the AI play
+- `train.py`: training and graph-generation flow
 - `agent.py`: DQN model and agent logic
+- `check_env.py`: quick environment check
+- `requirements.txt`: project dependencies
 - `tuning_lab.ipynb`: Colab notebook for hyperparameter tuning and graph generation
-- `models/dqn_flappy_50_best.pth`: weak demo model
-- `models/dqn_flappy_500_best.pth`: medium demo model
-- `models/dqn_flappy_1000_best.pth`: strong score-base demo model
-- `models/dqn_flappy_strong_best.pth`: tuned stability-first demo model
-- `compare_checkpoints.py`: deterministic benchmark helper for workshop comparison slides
-- `workshop_benchmark_summary.md`: slide-ready benchmark summary with speaker notes
+- `models/`: prepared demo checkpoints
+- `training_progress_50.png`: weak baseline graph
+- `training_progress_500.png`: medium baseline graph
+- `training_progress_3000.png`: long-training graph that shows instability clearly
 
 ## Project structure
 
@@ -34,19 +35,25 @@ Flappy bird/
 |-- requirements.txt
 |-- tuning_lab.ipynb
 |-- models/
+|-- training_progress_50.png
+|-- training_progress_500.png
+|-- training_progress_3000.png
 ```
 
 Main roles:
 
 - `manual_play.py`: human-controlled baseline
 - `play.py`: AI-controlled demo playback
-- `train.py`: training and evaluation flow
+- `train.py`: training and graph-generation flow
 - `agent.py`: DQN model, replay memory, checkpoint loading and saving
 - `tuning_lab.ipynb`: Colab workspace for trying hyperparameter changes and generating graphs
 - `models/`: prepared checkpoints for quick comparison
-- `old_graphs/`: archived training plots from previous experiments
-- `compare_checkpoints.py`: evaluate checkpoints with the same seeds and export a slide-ready summary
-- `workshop_benchmark_summary.md`: ready-to-copy presentation summary based on benchmark output
+
+Optional support/archive material:
+
+- `old_graphs/`: archived graphs that are not part of the main classroom flow
+- `notes/`: supporting notes and presentation assets
+- `clips/`: media assets
 
 ## Requirements
 
@@ -111,9 +118,12 @@ Controls:
 
 2. Watch the backup AI model play.
 
-The numbers `50`, `500`, and `1000` are training episode counts.
-They represent how long each AI brain was trained before saving the checkpoint.
-In general, a model trained for more episodes should perform better, but the goal here is to let you compare weak, medium, strong, and tuned-stable behavior side by side.
+The prepared checkpoints are there for quick comparison during the demo.
+For the presentation graphs, the main baseline story is:
+
+- `50`: weak baseline
+- `500`: medium baseline
+- `3000`: longer training that still becomes unstable
 
 Choose the AI brain first:
 
@@ -147,8 +157,6 @@ Notes:
 - `models/dqn_flappy_strong_best.pth` is a separately tuned stability-first model
 - `python play.py --games 1` now defaults to the strongest AI model automatically
 - the first four commands let you choose the AI brain explicitly before watching
-- `dqn_flappy_1000_best.pth` can spike to a higher score in some runs
-- `dqn_flappy_strong_best.pth` was tuned to reduce early failures and be more stable across runs
 - in Quick demo mode, you do not need to run `train.py`
 - if you already trained a weak model and overwrote files locally, download the latest ZIP from GitHub again to restore the backup models
 
@@ -204,11 +212,13 @@ Recommended classroom sequence:
 5. `python play.py --model .\models\dqn_flappy_1000_best.pth --games 1`
 6. `python play.py --model .\models\dqn_flappy_strong_best.pth --games 1`
 7. explain the difference between `manual_play.py` and `play.py`
-8. move to Google Colab and open `tuning_lab.ipynb`
-9. upload the full project ZIP to Colab
-10. run the setup cells in `tuning_lab.ipynb`
-11. change one hyperparameter at a time
-12. compare the generated training-progress graphs
+8. show the three baseline graphs: `50`, `500`, `3000`
+9. explain why more episodes alone are not enough
+10. move to Google Colab and open `tuning_lab.ipynb`
+11. upload the full project ZIP to Colab
+12. run the setup cells in `tuning_lab.ipynb`
+13. change one hyperparameter at a time
+14. compare the generated training-progress graphs
 
 ## Training notes and model comparison
 
@@ -216,14 +226,8 @@ This repository includes multiple checkpoints so the class can compare different
 
 - `50` is a weak comparison point
 - `500` is a medium comparison point
-- `1000` is a strong score-oriented model
-- `Strong` is a tuned follow-up model that prioritizes stability more than peak score
-
-The most important classroom comparison is `1000` versus `Strong`:
-
-- `dqn_flappy_1000_best.pth` is the higher-risk, higher-peak score-base model
-- `dqn_flappy_strong_best.pth` is a separate tuned model that focuses more on stability
-- compared with `1000`, the tuned `Strong` version adds Double DQN, Huber loss, a lower learning rate, a larger batch size, a larger replay buffer, gradient clipping, and multi-game evaluation for checkpoint selection
+- `3000` is the most useful long-training graph for showing that more episodes do not automatically mean more stability
+- extra strong or tuned checkpoints can still be used as supporting examples during discussion, but they are not the main three-graph baseline story
 
 This does not guarantee a perfect run every time. Flappy Bird still contains variation, and DQN is still an approximate method. The practical goal is to reduce early failures and make the demo behavior more reliable.
 
@@ -245,6 +249,7 @@ Good first experiments:
 - epsilon decay comparison
 - reward shaping on versus off
 - replay buffer size comparison
+- discount factor comparison
 
 Why Colab is used here:
 
@@ -252,30 +257,21 @@ Why Colab is used here:
 - the graphs appear in the notebook immediately
 - this is more convenient for parameter exploration than re-running local demo commands
 
-## Benchmark for slides
+## Graphs used in slides
 
-If you want reproducible numbers for PowerPoint instead of eyeballing only the plots, run:
+The main three graphs for the presentation are:
 
-```bash
-python compare_checkpoints.py --games 100 --csv-out notes\checkpoint_benchmark.csv --markdown-out notes\checkpoint_benchmark.md
-```
+- `training_progress_50.png`
+- `training_progress_500.png`
+- `training_progress_3000.png`
 
-What this gives you:
+These three are used to tell the simplest classroom story:
 
-- deterministic evaluation with the same seed pattern for every checkpoint
-- failure rate for "dies too early" comparisons
-- quartiles, median, mean, and max score for consistency analysis
-- a Markdown summary you can copy into presentation notes
+- weak learning
+- partial learning
+- longer training with visible instability
 
-The default benchmark set includes the weak, medium, score-peak, stable, and candidate checkpoints that already exist in `models/`.
-
-## Backup material
-
-- `models/dqn_flappy_50_best.pth`: weak checkpoint for comparison
-- `models/dqn_flappy_500_best.pth`: medium checkpoint for comparison
-- `models/dqn_flappy_1000_best.pth`: strong score-base checkpoint for comparison
-- `models/dqn_flappy_strong_best.pth`: separately tuned stability-first checkpoint for comparison
-- `old_graphs/training_progress_1000.png`: sample training curve
+Other graphs such as tuned or stable runs should be treated as supporting material, not the main baseline set.
 
 ## Troubleshooting
 
