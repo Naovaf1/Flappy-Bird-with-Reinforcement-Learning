@@ -9,9 +9,13 @@ env/
 
 notes/
 clips/
+old_graphs/
+notebook_outputs/
+models/notebook_temp/
 
 training_progress.png
 training_progress_200.png
+training_progress_stable.png
 
 .DS_Store
 Thumbs.db

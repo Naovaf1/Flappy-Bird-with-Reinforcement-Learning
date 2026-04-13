@@ -18,7 +18,7 @@ Core files used in the current teaching plan:
 - `check_env.py`: quick environment check
 - `requirements.txt`: project dependencies
 - `tuning_lab.ipynb`: Colab notebook for hyperparameter tuning and graph generation
-- `models/`: prepared demo checkpoints
+- `models/`: prepared demo checkpoints for `50`, `500`, `1000`, and `strong`
 - `training_progress_50.png`: weak baseline graph
 - `training_progress_500.png`: medium baseline graph
 - `training_progress_3000.png`: long-training graph that shows instability clearly
@@ -47,13 +47,7 @@ Main roles:
 - `train.py`: training and graph-generation flow
 - `agent.py`: DQN model, replay memory, checkpoint loading and saving
 - `tuning_lab.ipynb`: Colab workspace for trying hyperparameter changes and generating graphs
-- `models/`: prepared checkpoints for quick comparison
-
-Optional support/archive material:
-
-- `old_graphs/`: archived graphs that are not part of the main classroom flow
-- `notes/`: supporting notes and presentation assets
-- `clips/`: media assets
+- `models/`: prepared checkpoints for quick comparison during the demo
 
 ## Requirements
 
@@ -155,6 +149,7 @@ Notes:
 - `models/dqn_flappy_500_best.pth` is a medium model for comparison
 - `models/dqn_flappy_1000_best.pth` is the strong score-base model in this repository
 - `models/dqn_flappy_strong_best.pth` is a separately tuned stability-first model
+- only these four checkpoints are kept in `models/` for the public teaching repository
 - `python play.py --games 1` now defaults to the strongest AI model automatically
 - the first four commands let you choose the AI brain explicitly before watching
 - in Quick demo mode, you do not need to run `train.py`
@@ -200,6 +195,7 @@ Important note:
 
 - the notebook is a tuning workspace, not a standalone trainer
 - if you upload only the notebook without the rest of the project, it will fail because `train.py` and `agent.py` are required
+- graphs or temporary checkpoints created during tuning should stay in ignored local folders, not in the main repository root
 
 ## Classroom flow
 
@@ -272,6 +268,17 @@ These three are used to tell the simplest classroom story:
 - longer training with visible instability
 
 Other graphs such as tuned or stable runs should be treated as supporting material, not the main baseline set.
+
+## Repository cleanup policy
+
+To keep the teaching repository simple, the public version keeps only:
+
+- the code needed to run the demo
+- the Colab notebook used for tuning
+- four prepared demo checkpoints in `models/`
+- the three baseline graphs used in slides
+
+Older graphs, extra tuning runs, temporary checkpoints, and draft workshop files should stay outside the public repo or inside ignored local folders.
 
 ## Troubleshooting
 
