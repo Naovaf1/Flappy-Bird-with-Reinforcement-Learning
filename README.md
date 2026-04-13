@@ -18,7 +18,7 @@ Core files used in the current teaching plan:
 - `check_env.py`: quick environment check
 - `requirements.txt`: project dependencies
 - `tuning_lab.ipynb`: Colab notebook for hyperparameter tuning and graph generation
-- `models/`: prepared demo checkpoints for `50`, `500`, `1000`, and `strong`
+- `models/`: prepared demo checkpoints for local playback
 - `training_progress_50.png`: weak baseline graph
 - `training_progress_500.png`: medium baseline graph
 - `training_progress_3000.png`: long-training graph that shows instability clearly
@@ -47,7 +47,7 @@ Main roles:
 - `train.py`: training and graph-generation flow
 - `agent.py`: DQN model, replay memory, checkpoint loading and saving
 - `tuning_lab.ipynb`: Colab workspace for trying hyperparameter changes and generating graphs
-- `models/`: prepared checkpoints for quick comparison during the demo
+- `models/`: prepared checkpoints for local playback during the demo
 
 ## Requirements
 
@@ -129,14 +129,6 @@ python play.py --model .\models\dqn_flappy_50_best.pth --games 1
 python play.py --model .\models\dqn_flappy_500_best.pth --games 1
 ```
 
-```bash
-python play.py --model .\models\dqn_flappy_1000_best.pth --games 1
-```
-
-```bash
-python play.py --model .\models\dqn_flappy_strong_best.pth --games 1
-```
-
 Default AI playback:
 
 ```bash
@@ -147,12 +139,11 @@ Notes:
 
 - `models/dqn_flappy_50_best.pth` is a weak model for comparison
 - `models/dqn_flappy_500_best.pth` is a medium model for comparison
-- `models/dqn_flappy_1000_best.pth` is the strong score-base model in this repository
-- `models/dqn_flappy_strong_best.pth` is a separately tuned stability-first model
-- only these four checkpoints are kept in `models/` for the public teaching repository
-- `python play.py --games 1` now defaults to the strongest AI model automatically
-- the first four commands let you choose the AI brain explicitly before watching
-- in Quick demo mode, you do not need to run `train.py`
+- `training_progress_3000.png` is the long-training comparison graph used in slides
+- `models/dqn_flappy_1000_best.pth` and `models/dqn_flappy_strong_best.pth` may still exist as supporting checkpoints, but they are not part of the main classroom demo sequence
+- `python play.py --games 1` uses the default model configured in `play.py`
+- for the current classroom plan, the local playback sequence focuses on `50` and `500`, then moves to the three graphs `50`, `500`, and `3000`
+- in the classroom demo, you do not need to run `train.py`
 - if you already trained a weak model and overwrote files locally, download the latest ZIP from GitHub again to restore the backup models
 
 ## Hyperparameter tuning in Colab
@@ -275,7 +266,7 @@ To keep the teaching repository simple, the public version keeps only:
 
 - the code needed to run the demo
 - the Colab notebook used for tuning
-- four prepared demo checkpoints in `models/`
+- the prepared checkpoints needed for local playback
 - the three baseline graphs used in slides
 
 Older graphs, extra tuning runs, temporary checkpoints, and draft workshop files should stay outside the public repo or inside ignored local folders.
