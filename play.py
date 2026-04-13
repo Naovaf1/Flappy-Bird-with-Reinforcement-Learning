@@ -9,7 +9,7 @@ import pygame
 from agent import DQNAgent, load_checkpoint
 
 
-DEFAULT_MODEL_PATH = "models/dqn_flappy_strong_best.pth"
+DEFAULT_MODEL_PATH = "models/dqn_flappy_3000_best.pth"
 
 
 def resolve_model_path(model_path):
@@ -18,7 +18,6 @@ def resolve_model_path(model_path):
 
     for candidate in (
         DEFAULT_MODEL_PATH,
-        "models/dqn_flappy_1000_best.pth",
         "models/dqn_flappy_500_best.pth",
         "models/dqn_flappy_50_best.pth",
         "models/dqn_flappy_best.pth",

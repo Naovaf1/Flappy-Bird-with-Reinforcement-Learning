@@ -15,6 +15,15 @@ def parse_hidden_sizes(hidden_sizes_text):
     return tuple(int(part.strip()) for part in hidden_sizes_text.split(",") if part.strip())
 
 
+def parse_optional_float(value):
+    if value is None:
+        return None
+    text = str(value).strip().lower()
+    if text in {"none", "null", ""}:
+        return None
+    return float(value)
+
+
 def make_env(render=False, use_lidar=False, score_limit=None):
     env_mode = "human" if render else None
     return gym.make(
@@ -139,6 +148,7 @@ def train(args):
 
     scores = []
     training_rewards = []
+    eval_history = []
     best_eval_metric = None
     best_eval_stats = None
     global_step = 0
@@ -205,6 +215,7 @@ def train(args):
                 f"mean={eval_stats['mean_score']:.1f} | max={eval_stats['max_score']} | "
                 f"scores={eval_stats['scores']}"
             )
+            eval_history.append((episode, eval_stats['median_score']))
 
             if best_eval_metric is None or eval_stats["metric"] > best_eval_metric:
                 best_eval_metric = eval_stats["metric"]
@@ -225,10 +236,10 @@ def train(args):
     agent.save(args.final_model, metadata=final_metadata)
     print(f"Saved final checkpoint to {args.final_model}")
     env.close()
-    return scores, training_rewards, best_eval_stats
+    return scores, training_rewards, best_eval_stats, eval_history
 
 
-def plot_scores(scores, output_path="training_progress.png", label="Score per episode"):
+def plot_scores(scores, output_path="training_progress.png", label="Score per episode", eval_history=None):
     plt.figure(figsize=(10, 5))
     plt.plot(scores, alpha=0.5, color="blue", label=label)
 
@@ -242,6 +253,10 @@ def plot_scores(scores, output_path="training_progress.png", label="Score per ep
             linewidth=2,
             label=f"Moving Avg ({window})",
         )
+
+    if eval_history:
+        eval_episodes, eval_scores = zip(*eval_history)
+        plt.plot(eval_episodes, eval_scores, color="green", marker="o", linewidth=2, markersize=5, label="Evaluation Median Score")
 
     plt.xlabel("Episode")
     plt.ylabel("Score")
@@ -264,30 +279,35 @@ if __name__ == "__main__":
     parser.add_argument("--resume-from", help="Optional checkpoint to continue training from.")
     parser.add_argument("--hidden-sizes", type=parse_hidden_sizes, default=(64, 64), help="Comma-separated hidden sizes.")
     parser.add_argument("--gamma", type=float, default=0.99)
-    parser.add_argument("--learning-rate", type=float, default=0.001)
-    parser.add_argument("--batch-size", type=int, default=64)
-    parser.add_argument("--memory-capacity", type=int, default=10000)
+    parser.add_argument("--learning-rate", type=float, default=0.0001)
+    parser.add_argument("--batch-size", type=int, default=128)
+    parser.add_argument("--memory-capacity", type=int, default=50000)
     parser.add_argument("--start-epsilon", type=float, default=1.0)
     parser.add_argument("--epsilon-min", type=float, default=0.01)
-    parser.add_argument("--epsilon-decay", type=float, default=0.995)
-    parser.add_argument("--double-dqn", action="store_true", help="Use Double DQN target selection.")
-    parser.add_argument("--loss-type", choices=("mse", "huber"), default="mse")
-    parser.add_argument("--grad-clip", type=float, help="Optional gradient clipping value.")
+    parser.add_argument("--epsilon-decay", type=float, default=0.9999)
+    parser.add_argument(
+        "--double-dqn",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Use Double DQN target selection.",
+    )
+    parser.add_argument("--loss-type", choices=("mse", "huber"), default="huber")
+    parser.add_argument("--grad-clip", type=parse_optional_float, default=1.0, help="Optional gradient clipping value. Use 'none' to disable.")
     parser.add_argument("--learning-starts", type=int, default=1000, help="Warm-up steps before learning starts.")
     parser.add_argument("--train-frequency", type=int, default=1, help="Gradient update frequency in environment steps.")
-    parser.add_argument("--target-update-steps", type=int, default=500, help="Sync target network every N environment steps.")
+    parser.add_argument("--target-update-steps", type=int, default=1000, help="Sync target network every N environment steps.")
     parser.add_argument("--eval-interval", type=int, default=100, help="Evaluate every N episodes.")
     parser.add_argument("--eval-games", type=int, default=12, help="Number of deterministic evaluation games.")
     parser.add_argument("--eval-score-limit", type=int, default=200, help="Cap evaluation games to keep runs bounded.")
     parser.add_argument("--failure-threshold", type=int, default=10, help="Scores below this count as unstable failures.")
-    parser.add_argument("--stability-bonus", type=float, default=0.0, help="Extra reward scale for staying near the next gap center.")
+    parser.add_argument("--stability-bonus", type=float, default=0.1, help="Extra reward scale for staying near the next gap center.")
     parser.add_argument("--checkpoint-label", default="default")
     parser.add_argument("--log-interval", type=int, default=10)
     parser.add_argument("--seed", type=int, default=42, help="Random seed for reproducible runs.")
     parser.add_argument("--eval-seed-base", type=int, default=50_000, help="Base seed for deterministic evaluation episodes.")
     args = parser.parse_args()
 
-    scores, training_rewards, best_eval_stats = train(args)
-    plot_scores(scores, output_path=args.plot)
+    scores, training_rewards, best_eval_stats, eval_history = train(args)
+    plot_scores(scores, output_path=args.plot, eval_history=eval_history)
     if best_eval_stats:
         print(f"Best eval stats: {best_eval_stats}")

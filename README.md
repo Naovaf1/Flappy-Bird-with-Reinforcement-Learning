@@ -18,7 +18,7 @@ Core files used in the current teaching plan:
 - `check_env.py`: quick environment check
 - `requirements.txt`: project dependencies
 - `tuning_lab.ipynb`: Colab notebook for hyperparameter tuning and graph generation
-- `models/`: prepared demo checkpoints for local playback
+- `models/`: prepared demo checkpoints for `50`, `500`, and `3000`
 - `training_progress_50.png`: weak baseline graph
 - `training_progress_500.png`: medium baseline graph
 - `training_progress_3000.png`: long-training graph that shows instability clearly
@@ -129,6 +129,10 @@ python play.py --model .\models\dqn_flappy_50_best.pth --games 1
 python play.py --model .\models\dqn_flappy_500_best.pth --games 1
 ```
 
+```bash
+python play.py --model .\models\dqn_flappy_3000_best.pth --games 1
+```
+
 Default AI playback:
 
 ```bash
@@ -139,11 +143,11 @@ Notes:
 
 - `models/dqn_flappy_50_best.pth` is a weak model for comparison
 - `models/dqn_flappy_500_best.pth` is a medium model for comparison
+- `models/dqn_flappy_3000_best.pth` is the long-training demo model used with `training_progress_3000.png`
 - `training_progress_3000.png` is the long-training comparison graph used in slides
-- `models/dqn_flappy_1000_best.pth` and `models/dqn_flappy_strong_best.pth` may still exist as supporting checkpoints, but they are not part of the main classroom demo sequence
-- `python play.py --games 1` uses the default model configured in `play.py`
+- `python play.py --games 1` now defaults to the `3000` demo model
 - for the current classroom plan, the classroom demo story is `50`, `500`, and `3000`
-- in practice, `50` and `500` are shown through local playback, while `3000` is shown through the training-progress graph
+- local playback can be used for all three demo brains: `50`, `500`, and `3000`
 - in the classroom demo, you do not need to run `train.py`
 - if you already trained a weak model and overwrote files locally, download the latest ZIP from GitHub again to restore the backup models
 
@@ -197,16 +201,17 @@ Recommended classroom sequence:
 2. `python manual_play.py`
 3. `python play.py --model .\models\dqn_flappy_50_best.pth --games 1`
 4. `python play.py --model .\models\dqn_flappy_500_best.pth --games 1`
-5. show `training_progress_50.png`
-6. show `training_progress_500.png`
-7. show `training_progress_3000.png`
-8. explain the difference between `manual_play.py` and `play.py`
-9. explain why more episodes alone are not enough
-10. move to Google Colab and open `tuning_lab.ipynb`
-11. upload the full project ZIP to Colab
-12. run the setup cells in `tuning_lab.ipynb`
-13. change one hyperparameter at a time
-14. compare the generated training-progress graphs
+5. `python play.py --model .\models\dqn_flappy_3000_best.pth --games 1`
+6. show `training_progress_50.png`
+7. show `training_progress_500.png`
+8. show `training_progress_3000.png`
+9. explain the difference between `manual_play.py` and `play.py`
+10. explain why more episodes alone are not enough
+11. move to Google Colab and open `tuning_lab.ipynb`
+12. upload the full project ZIP to Colab
+13. run the setup cells in `tuning_lab.ipynb`
+14. change one hyperparameter at a time
+15. compare the generated training-progress graphs
 
 ## Training notes and model comparison
 
@@ -214,8 +219,7 @@ This repository includes multiple checkpoints so the class can compare different
 
 - `50` is a weak comparison point
 - `500` is a medium comparison point
-- `3000` is the most useful long-training graph for showing that more episodes do not automatically mean more stability
-- extra strong or tuned checkpoints can still be used as supporting examples during discussion, but they are not the main three-graph baseline story
+- `3000` is the long-training comparison point used both as a demo brain and as the clearest instability graph
 
 This does not guarantee a perfect run every time. Flappy Bird still contains variation, and DQN is still an approximate method. The practical goal is to reduce early failures and make the demo behavior more reliable.
 
@@ -267,7 +271,7 @@ To keep the teaching repository simple, the public version keeps only:
 
 - the code needed to run the demo
 - the Colab notebook used for tuning
-- the prepared checkpoints needed for local playback
+- the three prepared demo checkpoints needed for local playback
 - the three baseline graphs used in slides
 
 Older graphs, extra tuning runs, temporary checkpoints, and draft workshop files should stay outside the public repo or inside ignored local folders.
