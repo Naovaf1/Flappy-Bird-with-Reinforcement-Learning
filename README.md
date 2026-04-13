@@ -14,8 +14,7 @@ The goal is not to build Flappy Bird from scratch. The goal is to start from an 
 - `play.py`: load a trained model and watch the AI play
 - `check_env.py`: quick environment check
 - `agent.py`: DQN model and agent logic
-- `skeleton/agent_skeleton.py`: incomplete workshop version for students
-- `skeleton/train_skeleton.py`: incomplete workshop version for students
+- `tuning_lab.ipynb`: Colab notebook for hyperparameter tuning and graph generation
 - `models/dqn_flappy_50_best.pth`: weak demo model
 - `models/dqn_flappy_500_best.pth`: medium demo model
 - `models/dqn_flappy_1000_best.pth`: strong score-base demo model
@@ -33,9 +32,8 @@ Flappy bird/
 |-- manual_play.py
 |-- check_env.py
 |-- requirements.txt
+|-- tuning_lab.ipynb
 |-- models/
-|-- skeleton/
-|-- notes/
 ```
 
 Main roles:
@@ -44,7 +42,7 @@ Main roles:
 - `play.py`: AI-controlled demo playback
 - `train.py`: training and evaluation flow
 - `agent.py`: DQN model, replay memory, checkpoint loading and saving
-- `skeleton/`: classroom starter files for students
+- `tuning_lab.ipynb`: Colab workspace for trying hyperparameter changes and generating graphs
 - `models/`: prepared checkpoints for quick comparison
 - `old_graphs/`: archived training plots from previous experiments
 - `compare_checkpoints.py`: evaluate checkpoints with the same seeds and export a slide-ready summary
@@ -90,9 +88,9 @@ The classroom goal is simple:
 
 - verify the environment works
 - compare human play and AI play
-- inspect the training code at a high level
 - compare weaker and stronger checkpoints
-- optionally train a short model and replay it
+- explain the core RL ideas behind the project
+- use Colab to tune hyperparameters and generate comparison graphs
 
 ## Path A: Quick demo
 
@@ -195,7 +193,7 @@ Important note:
 - the notebook is a tuning workspace, not a standalone trainer
 - if you upload only the notebook without the rest of the project, it will fail because `train.py` and `agent.py` are required
 
-## Workshop flow
+## Classroom flow
 
 Recommended classroom sequence:
 
@@ -206,73 +204,15 @@ Recommended classroom sequence:
 5. `python play.py --model .\models\dqn_flappy_1000_best.pth --games 1`
 6. `python play.py --model .\models\dqn_flappy_strong_best.pth --games 1`
 7. explain the difference between `manual_play.py` and `play.py`
-8. open and complete `skeleton/agent_skeleton.py`
-9. open and complete `skeleton/train_skeleton.py`
-10. compare with `agent.py` and `train.py`
-11. train a short model and play it
-12. train a longer model and compare the results
-
-## Path B: Workshop mode
-
-Use this path if students are going to complete missing logic and train their own models.
-
-1. Run the game yourself first:
-
-```bash
-python manual_play.py
-```
-
-2. Open and complete:
-
-- `skeleton/agent_skeleton.py`
-- `skeleton/train_skeleton.py`
-
-3. Compare with the reference files if needed:
-
-- `agent.py`
-- `train.py`
-
-4. Train and compare multiple models.
-
-Short training example:
-
-```bash
-python train.py --episodes 50 --best-model .\models\dqn_flappy_50_best.pth --final-model .\models\dqn_flappy_50_final.pth --plot training_progress_50.png
-python play.py --model .\models\dqn_flappy_50_best.pth --games 1
-```
-
-Medium training example:
-
-```bash
-python train.py --episodes 500 --best-model .\models\dqn_flappy_500_best.pth --final-model .\models\dqn_flappy_500_final.pth --plot training_progress_500.png
-python play.py --model .\models\dqn_flappy_500_best.pth --games 1
-```
-
-Strong score-base training example:
-
-```bash
-python train.py --episodes 1000 --best-model .\models\dqn_flappy_1000_best.pth --final-model .\models\dqn_flappy_1000_final.pth --plot training_progress_1000.png
-python play.py --model .\models\dqn_flappy_1000_best.pth --games 1
-```
-
-Strong tuned training example:
-
-```bash
-python train.py --episodes 1500 --resume-from .\models\dqn_flappy_1000_best.pth --best-model .\models\dqn_flappy_strong_best.pth --final-model .\models\dqn_flappy_strong_final.pth --plot training_progress_strong.png --checkpoint-label strong_base --hidden-sizes 64,64 --start-epsilon 0.05 --epsilon-min 0.01 --epsilon-decay 0.99997 --learning-rate 0.0003 --batch-size 128 --memory-capacity 50000 --double-dqn --loss-type huber --grad-clip 5 --learning-starts 128 --target-update-steps 1000 --eval-interval 100 --eval-games 12 --eval-score-limit 150 --failure-threshold 10 --stability-bonus 0.05
-python play.py --model .\models\dqn_flappy_strong_best.pth --games 1
-```
-
-This makes it easy to compare a weaker model and a stronger model without confusion.
-
-Important:
-
-- by default, `train.py` overwrites `models/dqn_flappy_best.pth` and `models/dqn_flappy_final.pth`
-- use `--best-model` and `--final-model` if you want to keep multiple checkpoints
-- if your local copy says `unrecognized arguments: --best-model`, your ZIP is from an older version of the repository and you should download the latest ZIP again
+8. move to Google Colab and open `tuning_lab.ipynb`
+9. upload the full project ZIP to Colab
+10. run the setup cells in `tuning_lab.ipynb`
+11. change one hyperparameter at a time
+12. compare the generated training-progress graphs
 
 ## Training notes and model comparison
 
-This repository includes multiple checkpoints so the class can compare different behaviors without retraining everything from scratch.
+This repository includes multiple checkpoints so the class can compare different behaviors immediately before moving into tuning experiments.
 
 - `50` is a weak comparison point
 - `500` is a medium comparison point
@@ -286,6 +226,31 @@ The most important classroom comparison is `1000` versus `Strong`:
 - compared with `1000`, the tuned `Strong` version adds Double DQN, Huber loss, a lower learning rate, a larger batch size, a larger replay buffer, gradient clipping, and multi-game evaluation for checkpoint selection
 
 This does not guarantee a perfect run every time. Flappy Bird still contains variation, and DQN is still an approximate method. The practical goal is to reduce early failures and make the demo behavior more reliable.
+
+## Colab tuning workflow
+
+Use `tuning_lab.ipynb` when the goal is to generate graphs, not to prepare final demo checkpoints.
+
+Recommended tuning mindset:
+
+1. start from one baseline configuration
+2. change one hyperparameter at a time
+3. keep the episode count the same across runs
+4. save each generated graph with a clear label
+5. compare the resulting curves side by side
+
+Good first experiments:
+
+- learning rate comparison
+- epsilon decay comparison
+- reward shaping on versus off
+- replay buffer size comparison
+
+Why Colab is used here:
+
+- students can edit values quickly
+- the graphs appear in the notebook immediately
+- this is more convenient for parameter exploration than re-running local demo commands
 
 ## Benchmark for slides
 
