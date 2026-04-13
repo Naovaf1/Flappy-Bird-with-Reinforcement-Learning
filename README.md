@@ -20,6 +20,8 @@ The goal is not to build Flappy Bird from scratch. The goal is to start from an 
 - `models/dqn_flappy_500_best.pth`: medium demo model
 - `models/dqn_flappy_1000_best.pth`: strong score-base demo model
 - `models/dqn_flappy_strong_best.pth`: tuned stability-first demo model
+- `compare_checkpoints.py`: deterministic benchmark helper for workshop comparison slides
+- `workshop_benchmark_summary.md`: slide-ready benchmark summary with speaker notes
 
 ## Project structure
 
@@ -44,6 +46,9 @@ Main roles:
 - `agent.py`: DQN model, replay memory, checkpoint loading and saving
 - `skeleton/`: classroom starter files for students
 - `models/`: prepared checkpoints for quick comparison
+- `old_graphs/`: archived training plots from previous experiments
+- `compare_checkpoints.py`: evaluate checkpoints with the same seeds and export a slide-ready summary
+- `workshop_benchmark_summary.md`: ready-to-copy presentation summary based on benchmark output
 
 ## Requirements
 
@@ -149,6 +154,47 @@ Notes:
 - in Quick demo mode, you do not need to run `train.py`
 - if you already trained a weak model and overwrote files locally, download the latest ZIP from GitHub again to restore the backup models
 
+## Colab tuning lab
+
+Use this path when you want to experiment with hyperparameters and generate training-progress graphs for comparison.
+
+Important separation:
+
+- local PowerShell / CMD is the recommended path for the live class demo
+- Google Colab is the recommended path for tuning experiments and graph generation
+
+Recommended flow:
+
+1. Download this repository as ZIP from GitHub.
+2. Open Google Colab.
+3. Upload the full project ZIP, not only `tuning_lab.ipynb`.
+4. Open `tuning_lab.ipynb` in Colab.
+5. Run the notebook cells from top to bottom:
+   - extract the ZIP if needed
+   - set `PROJECT_ROOT`
+   - verify `train.py`, `agent.py`, and `requirements.txt`
+   - install dependencies with `pip install -r requirements.txt`
+   - run tuning experiments
+
+What the notebook does:
+
+- calls `train.py` with the hyperparameters you choose
+- saves graphs to `notebook_outputs/`
+- shows the generated graph inside Colab
+- stores temporary checkpoints in `models/notebook_temp/` only for the duration of the experiment
+
+Good classroom use cases:
+
+- compare multiple `learning_rate` values with the same episode count
+- compare different `epsilon_decay` values
+- compare reward shaping on versus off
+- compare baseline runs against tuned runs
+
+Important note:
+
+- the notebook is a tuning workspace, not a standalone trainer
+- if you upload only the notebook without the rest of the project, it will fail because `train.py` and `agent.py` are required
+
 ## Workshop flow
 
 Recommended classroom sequence:
@@ -241,13 +287,30 @@ The most important classroom comparison is `1000` versus `Strong`:
 
 This does not guarantee a perfect run every time. Flappy Bird still contains variation, and DQN is still an approximate method. The practical goal is to reduce early failures and make the demo behavior more reliable.
 
+## Benchmark for slides
+
+If you want reproducible numbers for PowerPoint instead of eyeballing only the plots, run:
+
+```bash
+python compare_checkpoints.py --games 100 --csv-out notes\checkpoint_benchmark.csv --markdown-out notes\checkpoint_benchmark.md
+```
+
+What this gives you:
+
+- deterministic evaluation with the same seed pattern for every checkpoint
+- failure rate for "dies too early" comparisons
+- quartiles, median, mean, and max score for consistency analysis
+- a Markdown summary you can copy into presentation notes
+
+The default benchmark set includes the weak, medium, score-peak, stable, and candidate checkpoints that already exist in `models/`.
+
 ## Backup material
 
 - `models/dqn_flappy_50_best.pth`: weak checkpoint for comparison
 - `models/dqn_flappy_500_best.pth`: medium checkpoint for comparison
 - `models/dqn_flappy_1000_best.pth`: strong score-base checkpoint for comparison
 - `models/dqn_flappy_strong_best.pth`: separately tuned stability-first checkpoint for comparison
-- `training_progress_1000.png`: sample training curve
+- `old_graphs/training_progress_1000.png`: sample training curve
 
 ## Troubleshooting
 
